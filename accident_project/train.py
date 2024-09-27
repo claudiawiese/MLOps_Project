@@ -12,15 +12,15 @@ import sys
 client = MlflowClient(tracking_uri="http://127.0.0.1:8080")
 
 # Define experiment name, run name and artifact_path name
-apple_experiment = mlflow.set_experiment("Apple_Models")
+apple_experiment = mlflow.set_experiment("Accident_Models")
 run_name = "first_run"
-artifact_path = "rf_apples"
+artifact_path = "rf_accidents"
 
 # Import Database
-data = pd.read_csv("fake_data.csv")
-X = data.drop(columns=["date", "demand"])
+data = pd.read_csv("fake_data.csv") #replace by our data csv
+X = data.drop(columns=["target_column"]) #drop target_column
 X = X.astype('float')
-y = data["demand"]
+y = data["taget_column"] #define target_column
 X_train, X_val, y_train, y_val = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
@@ -31,6 +31,8 @@ n_estimators = int(sys.argv[1])
 max_depth = int(sys.argv[2])
 
 # Train model
+
+#Define your params
 params = {
     "n_estimators": n_estimators,
     "max_depth": max_depth,
@@ -39,7 +41,7 @@ params = {
 rf = RandomForestRegressor(**params)
 rf.fit(X_train, y_train)
 
-# Evaluate model
+# Evaluate your model
 y_pred = rf.predict(X_val)
 mae = mean_absolute_error(y_val, y_pred)
 mse = mean_squared_error(y_val, y_pred)
