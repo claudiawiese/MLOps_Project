@@ -5,6 +5,6 @@ python_env: python_env.yaml
 entry_points:
   main:
     parameters: #adapt parameters to our model chosen 
-      n_estimators: {type: int, default: 10} 
-      max_depth: {type: int, default: 10}
+      k: {type: int, default: 5} 
+      weights: {type: str, default: 'distance'}
     command: "python3 train.py {n_estimators} {max_depth}"

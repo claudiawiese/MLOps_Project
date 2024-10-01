@@ -17,37 +17,34 @@ run_name = "first_run"
 artifact_path = "rf_accidents"
 
 # Import Database
-data = pd.read_csv("fake_data.csv") #replace by our data csv
-X = data.drop(columns=["target_column"]) #drop target_column
-X = X.astype('float')
-y = data["taget_column"] #define target_column
+data = pd.read_csv("data/acc_data_encoded_2018-2022.parquet")
+target = pd.read_csv("data/acc_target_encoded_2018-2022.parquet")
+
+X = data
+y = target
 X_train, X_val, y_train, y_val = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
-
-
-# Define parameters
-n_estimators = int(sys.argv[1])
-max_depth = int(sys.argv[2])
 
 # Train model
 
 #Define your params
 params = {
-    "n_estimators": n_estimators,
-    "max_depth": max_depth,
-    "random_state": 42,
+    k = int(sys.argv[1])
+    weights = int(sys.argv[2])
 }
-rf = RandomForestRegressor(**params)
-rf.fit(X_train, y_train)
+
+#KNN model 
+knn = KNeighborsClassifier(**params)
+knn.fit(X_train, y_train)
 
 # Evaluate your model
-y_pred = rf.predict(X_val)
-mae = mean_absolute_error(y_val, y_pred)
-mse = mean_squared_error(y_val, y_pred)
-rmse = np.sqrt(mse)
-r2 = r2_score(y_val, y_pred)
-metrics = {"mae": mae, "mse": mse, "rmse": rmse, "r2": r2}
+y_pred = knn.predict(X_test)
+
+print(classification_report(y_test, y_pred))
+     
+print(confusion_matrix(y_test, y_pred))
+
 
 # Store information in tracking server
 with mlflow.start_run(run_name=run_name) as run:
