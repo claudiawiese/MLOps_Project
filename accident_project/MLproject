@@ -5,6 +5,7 @@ python_env: python_env.yaml
 entry_points:
   main:
     parameters: #adapt parameters to our model chosen 
-      k: {type: int, default: 5} 
+      n_neighbors: {type: int, default: 5} 
       weights: {type: str, default: 'distance'}
+      data: {type: str, default: 'data/dataset_Cramer.parquet'}
     command: "python3 train.py {n_estimators} {max_depth}"
