@@ -1,3 +1,4 @@
+import pytest
 from fastapi.testclient import TestClient
 from main import app
 from endpoints.auth import create_access_token

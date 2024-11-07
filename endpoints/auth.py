@@ -1,11 +1,13 @@
 # auth.py
-from fastapi import Depends, HTTPException, status, Security
+from fastapi import APIRouter, Depends, HTTPException, status, Security
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from typing import Optional, Dict
+
+router = APIRouter()
 
 # Security configurations
 SECRET_KEY = "votre_clé_secrète"  # Replace with your secret key
@@ -62,3 +64,16 @@ async def get_admin_user(current_user: User = Security(get_current_user)) -> Use
     if current_user.role != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
     return current_user
+
+# Login endpoint
+@router.post("/token")
+async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = get_user(fake_users_db, form_data.username)
+    if not user or not verify_password(form_data.password, user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Nom d'utilisateur ou mot de passe incorrect",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token = create_access_token(data={"sub": user.username, "role": user.role})
+    return {"access_token": access_token, "token_type": "bearer"}

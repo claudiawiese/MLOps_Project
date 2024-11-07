@@ -1,3 +1,4 @@
+import os
 import argparse
 import mlflow
 import pandas as pd
@@ -25,8 +26,10 @@ def load_data(data_path):
 
     if file_extension == ".csv":
         df = pd.read_csv(data_path)
+        return df
     elif file_extension == ".parquet":
-        df = pd.read_parquet(data)
+        df = pd.read_parquet(data_path)
+        return df
     else:
         raise ValueError("Unsupported file format. Please provide a .csv or .parquet file.")
 
