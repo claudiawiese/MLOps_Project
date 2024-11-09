@@ -53,12 +53,12 @@ Available models to train: KNN, RandomForest, Stacking with KNN and RandomForest
 
 #### predict_with_pretrained_model endpoint
 
-curl -X 'POST' \
-  'http://localhost:8000/predict_with_pretrained_model' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTczMTE1NTc3MH0.RdJHj4ZPcGtTIUu5LGvjuDns2Dy7tzurjasIRfz3Q84' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "data_path": "data/sample_data_for_prediction.parquet",
-  "pretrained_model_path": "pretrained_models/Stacking_RF_cv5.joblib"
-}'
+    curl -X 'POST' \
+    'http://localhost:8000/predict_with_pretrained_model' \
+    -H 'accept: application/json' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImV4cCI6MTczMTE1NTc3MH0.RdJHj4ZPcGtTIUu5LGvjuDns2Dy7tzurjasIRfz3Q84' \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "data_path": "data/sample_data_for_prediction.parquet",
+    "pretrained_model_path": "pretrained_models/Stacking_RF_cv5.joblib"
+    }'
