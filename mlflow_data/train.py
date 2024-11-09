@@ -4,7 +4,8 @@ import mlflow
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from sklearn.ensemble import RandomForestClassifier, StackingClassifier
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
 from datetime import datetime
 
@@ -62,9 +63,16 @@ with mlflow.start_run(run_name=run_name) as run:
         model = RandomForestClassifier(n_estimators=args.n_estimators, max_depth=args.max_depth)
     elif args.model_type == "Stacking":
         mlflow.log_param("model_type", "Stacking")
+
+        # Define base models
         knn = KNeighborsClassifier(n_neighbors=args.n_neighbors, weights=args.weights)
         rf = RandomForestClassifier(n_estimators=args.n_estimators, max_depth=args.max_depth)
-        model = VotingClassifier(estimators=[('knn', knn), ('rf', rf)], voting='soft')
+
+        # Define meta-classifier (stacker)
+        meta_classifier = LogisticRegression()
+
+        # Create StackingClassifier 
+        model = StackingClassifier(estimators=[('knn', knn), ('rf', rf)], final_estimator=meta_classifier)
     else:
         raise ValueError("Invalid model type specified")
     

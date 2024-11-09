@@ -10,9 +10,15 @@ def run_experiment(data_path: str, model_type: str, n_neighbors: Optional[int] =
     experiment_name = "Accident Experiment"
     mlflow.set_experiment(experiment_name)
 
+    # Validate model type
+    valid_model_types = ["KNN", "RandomForest", "Stacking"]
+    if model_type not in valid_model_types:
+        raise ValueError(f"Invalid model type: {model_type}. Expected one of {valid_model_types}.")
+
+
     # Prepare the command for train.py based on model type
     command = [
-        "python", "accident_project/train.py",
+        "python", "mlflow_data/train.py",
         "--data", data_path,
         "--model_type", model_type
     ]
@@ -29,8 +35,7 @@ def run_experiment(data_path: str, model_type: str, n_neighbors: Optional[int] =
         if max_depth is not None:
             command.extend(["--max_depth", str(max_depth)])
     elif model_type == "Stacking":
-        # Specify ensemble-related flags, if any
-        command.append("--stacking")
+            command
 
     # Add retrain flag if specified
     if retrain:

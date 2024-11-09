@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import Optional
-from accident_project.experiment import run_experiment
+from mlflow_data.experiment import run_experiment
 from endpoints.auth import get_admin_user, User 
 
 router = APIRouter()
