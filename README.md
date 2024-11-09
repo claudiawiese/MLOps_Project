@@ -1,6 +1,19 @@
 ### Accident Prediction API
 
-### generate jwt token 
+### Launch docker for api and mflow 
+
+docker-compose up --build 
+
+api available at port 8000 and mlflow at port 5000 
+
+To see endpoint you have access to Swagger 
+
+    localhost:8000/docs 
+
+
+### Endpoints
+
+#### generate jwt token 
 
 Example for admin
 
@@ -13,25 +26,32 @@ Example Response
         "token_type": "bearer"
     }
 
-### train endpoint 
+#### train endpoint 
 
-   curl -X POST "http://127.0.0.1:8000/train" -H "Content-Type: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...your_token_here..." -d '{
+    curl -X POST "http://127.0.0.1:8000/train" -H "Content-Type: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...your_token_here..." -d '{
     "data": "data/dataset_Cramer.parquet",
     "model_type": "KNN",
     "n_neighbors": 5,
     "weights": "distance",
+    "n_estimators": 0,
+    "max_depth":0,
     "retrain": false
     }'
 
+Available models to train: KNN, RandomForest, Stacking with KNN and RandomForest
 
-### predict endpoint 
+#### retrain endpoint 
+
+    To be defined 
+
+#### predict endpoint 
 
     curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -H "Authorization: Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...your_token_here..." -d '{
     "model_uri": "models:/KNN_Accident_Model/1",
     "data_path": "data/sample_data_for_prediction.parquet"
     }'
 
-### predict_with_pretrained_model endpoint
+#### predict_with_pretrained_model endpoint
 
 curl -X 'POST' \
   'http://localhost:8000/predict_with_pretrained_model' \
