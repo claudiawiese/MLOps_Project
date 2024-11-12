@@ -72,6 +72,7 @@ async def predict_with_pretrained_model(params: PretrainedModelParams, current_u
         df = pd.read_parquet(params.data_path)
         if "target" in df.columns:
             df = df.drop("target", axis=1)
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to load data: {e}")
 
