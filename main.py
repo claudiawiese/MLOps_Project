@@ -19,3 +19,26 @@ app.include_router(auth_router)
 @app.get("/", response_class=HTMLResponse)
 async def get_home(request: Request, error: str = None):
     return "Hello Home"
+
+
+#Code De Clement pour la BDD_users
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+import os
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Crée l'engine asynchrone
+engine = create_async_engine(DATABASE_URL, echo=True)
+
+# Crée une session asynchrone
+async_session = sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False
+)
+
+# Dépendance de session pour l'injection dans les routes
+async def get_db():
+    async with async_session() as session:
+        yield session
